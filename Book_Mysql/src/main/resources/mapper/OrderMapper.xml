@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.book.mapper.OrderMapper">
+    <!-- 插入订单主表 order_main，生成订单 id 后继续插入明细 -->
+    <insert id="insertOrder" parameterType="OrderMain" useGeneratedKeys="true" keyProperty="id">
+        insert into order_main(order_number, user_id, total_price, status)
+        values (#{orderNumber}, #{userId}, #{totalPrice}, #{status})
+    </insert>
+
+    <!-- 插入订单明细 order_item，保存商品、数量和下单时单价 -->
+    <insert id="insertOrderItem" parameterType="OrderItem" useGeneratedKeys="true" keyProperty="id">
+        insert into order_item(order_id, product_id, quantity, unit_price)
+        values (#{orderId}, #{productId}, #{quantity}, #{unitPrice})
+    </insert>
+
+    <!-- 查询当前用户的订单主表记录 -->
+    <select id="findByUserId" resultType="OrderMain">
+        select id, order_number, user_id, total_price, status, create_time
+        from order_main
+        where user_id = #{userId}
+        order by create_time desc
+    </select>
+
+    <!-- 查询订单明细并关联 product 表，获得商品名称和图片用于页面展示 -->
+    <select id="findItemsByOrderId" resultType="OrderItem">
+        select oi.id,
+               oi.order_id,
+               oi.product_id,
+               oi.quantity,
+               oi.unit_price,
+               p.name as product_name,
+               p.image_url
+        from order_item oi
+        left join product p on oi.product_id = p.id
+        where oi.order_id = #{orderId}
+        order by oi.id
+    </select>
+
+    <!-- 更新订单状态，例如确认/支付完成 -->
+    <update id="updateStatus">
+        update order_main
+        set status = #{status}
+        where id = #{id}
+    </update>
+
+    <!-- 删除订单主表；order_item 由数据库外键级联删除 -->
+    <delete id="delete">
+        delete from order_main
+        where id = #{id}
+    </delete>
+</mapper>

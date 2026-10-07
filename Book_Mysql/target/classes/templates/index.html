@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>商品列表 - 精进图书商城</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body class="user-bg">
+<div class="shell">
+    <aside class="sidebar">
+        <div class="logo">精进图书商城</div>
+        <nav class="nav">
+            <a class="active" th:href="@{/index}"><span class="nav-icon">📚</span><span>商品列表</span></a>
+            <div class="category-menu" th:if="${categories != null and !#lists.isEmpty(categories)}">
+                <a th:href="@{/index}" th:classappend="${selectedCategoryId == null} ? ' active'">全部分类</a>
+                <a th:each="category : ${categories}"
+                   th:href="@{/index(categoryId=${category.id})}"
+                   th:classappend="${selectedCategoryId == category.id} ? ' active'"
+                   th:text="${category.name}">分类</a>
+            </div>
+            <a th:href="@{/cart}"><span class="nav-icon">🛒</span><span>购物车</span></a>
+            <a th:href="@{/orders}"><span class="nav-icon">📦</span><span>我的订单</span></a>
+            <a th:href="@{/profile}"><span class="nav-icon">👤</span><span>个人中心</span></a>
+            <a th:if="${session.currUser.role == 1}" th:href="@{/admin}"><span class="nav-icon">🧭</span><span>后台管理</span></a>
+        </nav>
+        <a class="logout" th:href="@{/logout}">退出登录</a>
+    </aside>
+    <main class="main">
+        <header class="topbar">欢迎您，<strong th:text="${session.currUser.username}">用户</strong></header>
+        <section class="content">
+            <h1 class="page-title" th:text="${selectedCategory == null ? '全部商品' : selectedCategory.name}">全部商品</h1>
+            <div class="grid">
+                <article class="card product-card" th:each="p : ${products}">
+                    <div class="book-cover">
+                        <img th:if="${p.imageUrl != null and !#strings.isEmpty(p.imageUrl)}" th:src="${p.imageUrl}" th:alt="${p.name}">
+                        <span th:unless="${p.imageUrl != null and !#strings.isEmpty(p.imageUrl)}">暂无图片</span>
+                    </div>
+                    <strong th:text="${p.name}">商品名称</strong>
+                    <span class="price" th:text="${'￥' + p.price}">￥0.00</span>
+                    <span class="muted" th:text="${'库存：' + p.stock + '　销量：' + p.sales}">库存</span>
+                    <form th:action="@{'/cart/add/' + ${p.id}}" method="post">
+                        <button class="btn" type="submit">加入购物车</button>
+                    </form>
+                </article>
+            </div>
+        </section>
+    </main>
+</div>
+<script th:if="${message}" th:inline="javascript">
+    alert([[${message}]]);
+</script>
+</body>
+</html>

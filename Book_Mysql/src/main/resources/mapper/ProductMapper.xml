@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.book.mapper.ProductMapper">
+    <!-- 查询全部商品 -->
+    <select id="findAll" resultType="Product">
+        select id, name, price, stock, sales, category_id, image_url
+        from product
+        order by id
+    </select>
+
+    <!-- 根据分类 id 查询商品，用于首页分类筛选 -->
+    <select id="findByCategoryId" resultType="Product">
+        select id, name, price, stock, sales, category_id, image_url
+        from product
+        where category_id = #{categoryId}
+        order by id
+    </select>
+
+    <!-- 根据商品主键查询商品详情 -->
+    <select id="findById" resultType="Product">
+        select id, name, price, stock, sales, category_id, image_url
+        from product
+        where id = #{id}
+    </select>
+
+    <!-- 后台新增商品，id 由数据库自增生成 -->
+    <insert id="insert" parameterType="Product" useGeneratedKeys="true" keyProperty="id">
+        insert into product(name, price, stock, sales, category_id, image_url)
+        values (#{name}, #{price}, #{stock}, #{sales}, #{categoryId}, #{imageUrl})
+    </insert>
+
+    <!-- 后台修改商品基础信息 -->
+    <update id="update" parameterType="Product">
+        update product
+        set name = #{name},
+            price = #{price},
+            stock = #{stock},
+            category_id = #{categoryId},
+            image_url = #{imageUrl}
+        where id = #{id}
+    </update>
+
+    <!-- 后台删除商品 -->
+    <delete id="delete">
+        delete from product
+        where id = #{id}
+    </delete>
+
+    <!-- 删除前统计该商品是否被订单明细引用，用于保护历史订单数据 -->
+    <select id="countOrderReferences" resultType="int">
+        select count(*)
+        from order_item
+        where product_id = #{id}
+    </select>
+</mapper>

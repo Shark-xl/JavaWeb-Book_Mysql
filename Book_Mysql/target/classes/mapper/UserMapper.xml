@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--根目录-->
+<mapper namespace="com.book.mapper.UserMapper">
+    <!-- 登录：根据用户名和密码查询用户，成功返回 User，失败返回 null -->
+    <select id="login" resultType="User">
+        select id, username, password, role
+        from user
+        where username = #{username} and password = #{password}
+    </select>
+
+    <!-- 注册前查重：username 在数据库中有唯一索引 -->
+    <select id="findByUsername" resultType="User">
+        select id, username, password, role
+        from user
+        where username = #{username}
+    </select>
+
+    <!-- 根据用户 id 查询用户 -->
+    <select id="findById" resultType="User">
+        select id, username, password, role
+        from user
+        where id = #{id}
+    </select>
+
+    <!-- 注册新用户，role=0 表示普通用户 -->
+    <insert id="insert" parameterType="User" useGeneratedKeys="true" keyProperty="id">
+        insert into user(username, password, role)
+        values (#{username}, #{password}, #{role})
+    </insert>
+</mapper>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>个人中心 - 精进图书商城</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body class="user-bg">
+<div class="shell">
+    <aside class="sidebar">
+        <div class="logo">精进图书商城</div>
+        <nav class="nav">
+            <a th:href="@{/index}"><span class="nav-icon">📚</span><span>商品列表</span></a>
+            <a th:href="@{/cart}"><span class="nav-icon">🛒</span><span>购物车</span></a>
+            <a th:href="@{/orders}"><span class="nav-icon">📦</span><span>我的订单</span></a>
+            <a class="active" th:href="@{/profile}"><span class="nav-icon">👤</span><span>个人中心</span></a>
+            <a th:if="${session.currUser.role == 1}" th:href="@{/admin}"><span class="nav-icon">🧭</span><span>后台管理</span></a>
+        </nav>
+        <a class="logout" th:href="@{/logout}">退出登录</a>
+    </aside>
+    <main class="main">
+        <header class="topbar">个人中心</header>
+        <section class="content">
+            <h1 class="page-title">账号信息</h1>
+            <div class="card profile-card">
+                <div>
+                    <div class="profile-avatar">👤</div>
+                    <p><strong>用户 ID：</strong><span th:text="${user.id}">1</span></p>
+                    <p><strong>用户名：</strong><span th:text="${user.username}">user</span></p>
+                    <p><strong>角色：</strong><span th:text="${user.role == 1 ? '管理员' : '普通用户'}">普通用户</span></p>
+                </div>
+                <a class="btn danger" th:href="@{/logout}">退出登录</a>
+            </div>
+        </section>
+    </main>
+</div>
+</body>
+</html>

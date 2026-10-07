@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>后台管理 - 精进图书商城</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<div class="shell">
+    <aside class="sidebar">
+        <div class="logo">后台管理</div>
+        <nav class="nav">
+            <a th:href="@{/index}">返回商城</a>
+            <a class="active" th:href="@{/admin}">商品管理</a>
+            <a th:href="@{/admin/products/new}">新增商品</a>
+        </nav>
+        <a class="logout" th:href="@{/logout}">退出登录</a>
+    </aside>
+    <main class="main">
+        <header class="topbar">管理员：<strong th:text="${session.currUser.username}">admin</strong></header>
+        <section class="content">
+            <div class="toolbar">
+                <h1 class="page-title">商品管理</h1>
+                <a class="btn" th:href="@{/admin/products/new}">新增商品</a>
+            </div>
+            <div class="alert" th:if="${message}" th:text="${message}"></div>
+            <div class="alert error" th:if="${error}" th:text="${error}"></div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>名称</th>
+                    <th>价格</th>
+                    <th>库存</th>
+                    <th>销量</th>
+                    <th>分类</th>
+                    <th>图片</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="p : ${products}">
+                    <td th:text="${p.id}">1</td>
+                    <td th:text="${p.name}">商品</td>
+                    <td th:text="${'￥' + p.price}">价格</td>
+                    <td th:text="${p.stock}">库存</td>
+                    <td th:text="${p.sales}">销量</td>
+                    <td th:text="${p.categoryId}">分类</td>
+                    <td>
+                        <span class="muted" th:if="${p.imageUrl == null or #strings.isEmpty(p.imageUrl)}">无图</span>
+                        <span th:unless="${p.imageUrl == null or #strings.isEmpty(p.imageUrl)}" th:text="${p.imageUrl}">图片</span>
+                    </td>
+                    <td>
+                        <div class="row-actions">
+                            <a class="btn secondary" th:href="@{'/admin/products/' + ${p.id} + '/edit'}">编辑</a>
+                            <form th:action="@{'/admin/products/' + ${p.id} + '/delete'}" method="post">
+                                <button class="btn danger" type="submit">删除</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+</div>
+</body>
+</html>

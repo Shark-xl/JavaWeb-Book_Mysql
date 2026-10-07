@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.book.mapper.CartMapper">
+    <!-- 联表查询购物车：cart 保存数量，product 保存商品名称、价格、图片 -->
+    <select id="findItemsByUserId" resultType="CartItem">
+        select c.id as cart_id,
+               c.product_id,
+               c.quantity,
+               p.name,
+               p.price,
+               p.image_url
+        from cart c
+        join product p on c.product_id = p.id
+        where c.user_id = #{userId}
+        order by c.id
+    </select>
+
+    <!-- 添加购物车前查询是否已有同一用户、同一商品的记录 -->
+    <select id="findByUserAndProduct" resultType="Cart">
+        select id, user_id, product_id, quantity
+        from cart
+        where user_id = #{userId} and product_id = #{productId}
+    </select>
+
+    <!-- 第一次加入购物车时插入记录，id 使用数据库自增主键 -->
+    <insert id="insert" parameterType="Cart" useGeneratedKeys="true" keyProperty="id">
+        insert into cart(user_id, product_id, quantity)
+        values (#{userId}, #{productId}, #{quantity})
+    </insert>
+
+    <!-- 商品已在购物车时更新数量 -->
+    <update id="updateQuantity">
+        update cart
+        set quantity = #{quantity}
+        where id = #{id}
+    </update>
+
+    <!-- 删除当前用户购物车中的指定商品 -->
+    <delete id="deleteByUserAndProduct">
+        delete from cart
+        where user_id = #{userId} and product_id = #{productId}
+    </delete>
+
+    <!-- 下单成功后清空该用户购物车 -->
+    <delete id="clearByUserId">
+        delete from cart
+        where user_id = #{userId}
+    </delete>
+</mapper>

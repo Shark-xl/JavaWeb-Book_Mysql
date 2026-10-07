@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>我的订单 - 精进图书商城</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body class="user-bg">
+<div class="shell">
+    <aside class="sidebar">
+        <div class="logo">精进图书商城</div>
+        <nav class="nav">
+            <a th:href="@{/index}"><span class="nav-icon">📚</span><span>商品列表</span></a>
+            <a th:href="@{/cart}"><span class="nav-icon">🛒</span><span>购物车</span></a>
+            <a class="active" th:href="@{/orders}"><span class="nav-icon">📦</span><span>我的订单</span></a>
+            <a th:href="@{/profile}"><span class="nav-icon">👤</span><span>个人中心</span></a>
+            <a th:if="${session.currUser.role == 1}" th:href="@{/admin}"><span class="nav-icon">🧭</span><span>后台管理</span></a>
+        </nav>
+        <a class="logout" th:href="@{/logout}">退出登录</a>
+    </aside>
+    <main class="main">
+        <header class="topbar">我的订单</header>
+        <section class="content">
+            <h1 class="page-title">我的订单</h1>
+            <article class="card order" th:each="order : ${orders}">
+                <div class="toolbar">
+                    <div>
+                        <strong th:text="${'订单号：' + order.orderNumber}">订单号</strong>
+                        <div class="muted" th:text="${'创建时间：' + order.createTime}">时间</div>
+                    </div>
+                    <div>
+                        <strong th:text="${'￥' + order.totalPrice}">金额</strong>
+                        <span class="muted" th:text="${order.status == 2 ? '已支付' : (order.status == 1 ? '已确认' : '待支付')}">状态</span>
+                    </div>
+                </div>
+                <table class="table">
+                    <tbody>
+                    <tr th:each="item : ${order.items}">
+                        <td th:text="${item.productName}">商品</td>
+                        <td th:text="${'数量：' + item.quantity}">数量</td>
+                        <td th:text="${'单价：￥' + item.unitPrice}">单价</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="row-actions" style="margin-top:12px;">
+                    <form th:if="${order.status != 2}" th:action="@{'/orders/' + ${order.id} + '/confirm'}" method="post" onsubmit="return confirm('确认完成并支付该订单吗？');">
+                        <button class="btn" type="submit">确认完成</button>
+                    </form>
+                    <button th:if="${order.status == 2}" class="btn" type="button" disabled>已支付</button>
+                    <form th:action="@{'/orders/' + ${order.id} + '/cancel'}" method="post" onsubmit="return confirm('确定要删除该订单吗？此操作不可恢复。');">
+                        <button class="btn danger" type="submit" th:text="${order.status == 2 ? '删除订单' : '取消订单'}">删除订单</button>
+                    </form>
+                </div>
+            </article>
+            <p class="muted" th:if="${#lists.isEmpty(orders)}">暂无订单</p>
+        </section>
+    </main>
+</div>
+<script th:if="${message}" th:inline="javascript">
+    alert([[${message}]]);
+</script>
+</body>
+</html>

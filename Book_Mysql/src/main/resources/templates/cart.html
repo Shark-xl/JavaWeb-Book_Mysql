@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>购物车 - 精进图书商城</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body class="user-bg">
+<div class="shell">
+    <aside class="sidebar">
+        <div class="logo">精进图书商城</div>
+        <nav class="nav">
+            <a th:href="@{/index}"><span class="nav-icon">📚</span><span>商品列表</span></a>
+            <a class="active" th:href="@{/cart}"><span class="nav-icon">🛒</span><span>购物车</span></a>
+            <a th:href="@{/orders}"><span class="nav-icon">📦</span><span>我的订单</span></a>
+            <a th:href="@{/profile}"><span class="nav-icon">👤</span><span>个人中心</span></a>
+            <a th:if="${session.currUser.role == 1}" th:href="@{/admin}"><span class="nav-icon">🧭</span><span>后台管理</span></a>
+        </nav>
+        <a class="logout" th:href="@{/logout}">退出登录</a>
+    </aside>
+    <main class="main">
+        <header class="topbar">购物车</header>
+        <section class="content">
+            <div class="alert error" th:if="${error}" th:text="${error}"></div>
+            <h1 class="page-title">购物车</h1>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>商品</th>
+                    <th>单价</th>
+                    <th>数量</th>
+                    <th>小计</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="item : ${items}">
+                    <td th:text="${item.name}">商品</td>
+                    <td th:text="${'￥' + item.price}">价格</td>
+                    <td th:text="${item.quantity}">1</td>
+                    <td th:text="${'￥' + item.itemTotal}">小计</td>
+                    <td>
+                        <form th:action="@{'/cart/delete/' + ${item.productId}}" method="post">
+                            <button class="btn danger" type="submit">删除</button>
+                        </form>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(items)}">
+                    <td colspan="5" class="muted">购物车暂无商品</td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="toolbar" style="margin-top:18px;">
+                <strong th:text="${'合计：￥' + total}">合计</strong>
+                <form th:action="@{/order/create}" method="post">
+                    <button class="btn" type="submit" th:disabled="${#lists.isEmpty(items)}">创建订单</button>
+                </form>
+            </div>
+        </section>
+    </main>
+</div>
+</body>
+</html>

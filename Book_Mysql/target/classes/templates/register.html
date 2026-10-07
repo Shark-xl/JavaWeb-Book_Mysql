@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>注册 - 精进图书商城</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body class="auth-bg">
+<main class="form-page">
+    <section class="auth-box">
+        <div class="auth-brand">
+            <div class="auth-mark">🌿</div>
+            <h1 class="page-title">注册账号</h1>
+            <p class="auth-subtitle">创建账号，收藏属于你的书单</p>
+        </div>
+        <div class="alert error" th:if="${error}" th:text="${error}"></div>
+        <form class="form-grid" th:action="@{/register}" method="post">
+            <label class="field">
+                <span>用户名</span>
+                <input name="username" autocomplete="username" required>
+            </label>
+            <label class="field">
+                <span>密码</span>
+                <input name="password" type="password" autocomplete="new-password" required>
+            </label>
+            <button class="btn" type="submit">注册</button>
+            <a class="btn ghost" th:href="@{/login}">返回登录</a>
+        </form>
+    </section>
+</main>
+</body>
+</html>

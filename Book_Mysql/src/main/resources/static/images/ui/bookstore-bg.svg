@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-label="Minimal blue and green bookstore background">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#f8fcff"/>
+      <stop offset="0.48" stop-color="#edf7fb"/>
+      <stop offset="1" stop-color="#f5fffb"/>
+    </linearGradient>
+    <linearGradient id="bookBlue" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#2f80ed"/>
+      <stop offset="1" stop-color="#38bdf8"/>
+    </linearGradient>
+    <linearGradient id="bookGreen" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#21b69a"/>
+      <stop offset="1" stop-color="#9be7c4"/>
+    </linearGradient>
+    <filter id="softShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#0f4c81" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#bg)"/>
+  <circle cx="1340" cy="180" r="260" fill="#dff4ff" opacity="0.72"/>
+  <circle cx="1240" cy="830" r="330" fill="#dcfce7" opacity="0.62"/>
+  <circle cx="170" cy="760" r="260" fill="#e0f2fe" opacity="0.62"/>
+  <g opacity="0.36" filter="url(#softShadow)">
+    <path d="M1030 286c88-36 179-35 274 5v314c-95-38-186-39-274-4z" fill="url(#bookBlue)"/>
+    <path d="M742 292c94-42 190-42 288-6v315c-98-35-194-35-288 6z" fill="url(#bookGreen)"/>
+    <path d="M1030 286v315" stroke="#ffffff" stroke-width="8" opacity="0.75"/>
+    <path d="M790 354c60-22 121-23 183-3M790 424c60-22 121-23 183-3M790 494c60-22 121-23 183-3" stroke="#ffffff" stroke-width="10" stroke-linecap="round" opacity="0.55"/>
+    <path d="M1085 352c56-16 111-15 168 2M1085 422c56-16 111-15 168 2M1085 492c56-16 111-15 168 2" stroke="#ffffff" stroke-width="10" stroke-linecap="round" opacity="0.55"/>
+  </g>
+  <g opacity="0.38">
+    <rect x="190" y="160" width="78" height="108" rx="16" fill="#2f80ed"/>
+    <rect x="280" y="138" width="78" height="130" rx="16" fill="#21b69a"/>
+    <rect x="370" y="184" width="78" height="84" rx="16" fill="#7dd3fc"/>
+    <path d="M190 308h258" stroke="#a7f3d0" stroke-width="12" stroke-linecap="round"/>
+  </g>
+  <path d="M0 885c205-74 381-72 528 6s319 79 516 3 383-75 556 6v100H0z" fill="#ffffff" opacity="0.56"/>
+</svg>
